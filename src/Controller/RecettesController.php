@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Commentaire;
 use App\Entity\Favoris;
 use App\Entity\Recette;
+use App\Form\AddRecettesType;
 use App\Form\CommentaireType;
 use App\Repository\CategorieRepository;
 use App\Repository\CommentaireRepository;
@@ -16,6 +17,7 @@ use App\Repository\SaisonRepository;
 use App\Repository\UstensileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -290,7 +292,7 @@ class RecettesController extends AbstractController
             ]);
         }
 
-    }
+    
     #[Route('/', name: 'app_accueil')]
     public function accueil(CategorieRepository $cr,CommentaireRepository $cor, IngredientRepository $ing,RecetteRepository $rr, SaisonRepository $sr, BudgetRepository $br): Response
     {
@@ -360,7 +362,7 @@ class RecettesController extends AbstractController
  
     #[Route('/recette/{id}/favori', name:"ajout_favori")]
 
-    public function ajoutFavori(Recette $recette): Response
+    public function ajoutFavori(Recette $recette, Request $request): Response
     {
         $idUser = $this->getUser(); // S'assurer que l'utilisateur est connecté
         if (!$idUser) {
@@ -371,21 +373,37 @@ class RecettesController extends AbstractController
             'idUser' => $idUser,
             'recette' => $recette
         ]);
+        $message = '';
+        $messageError = '';
 
         if ($favori) {
             // Si le favori existe, on le supprime
             $this->entityManager->remove($favori);
+            $messageError = 'La recette a été retirée de vos favoris';
+            $this->addFlash('error', $messageError);
         } else {
             // Sinon, on en crée un nouveau
             $favori = new Favoris();
             $favori->setIdUser($idUser);
             $favori->setRecette($recette);
             $this->entityManager->persist($favori);
+            $message = 'La recette a bien été ajoutée à vos favoris';
+            $this->addFlash('success', $message);
         }
 
         $this->entityManager->flush();
+        // Ajouter le message flash
+        
+        
+        
+        // Si c'est une requête AJAX, retourner une réponse JSON
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse(['message' => $message]);
+        }
 
         // Rediriger vers la page de la recette
-        return $this->redirectToRoute('app_accueil');
+        return $this->redirect($request->headers->get('referer'));
+
+        
     }
 }
