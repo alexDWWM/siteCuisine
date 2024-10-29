@@ -362,7 +362,7 @@ class RecettesController extends AbstractController
  
     #[Route('/recette/{id}/favori', name:"ajout_favori")]
 
-    public function ajoutFavori(Recette $recette): Response
+    public function ajoutFavori(Recette $recette, Request $request): Response
     {
         $idUser = $this->getUser(); // S'assurer que l'utilisateur est connecté
         if (!$idUser) {
@@ -377,17 +377,24 @@ class RecettesController extends AbstractController
         if ($favori) {
             // Si le favori existe, on le supprime
             $this->entityManager->remove($favori);
+            $this->addFlash('error', 'La recette a été retirée de vos favoris.');
         } else {
             // Sinon, on en crée un nouveau
             $favori = new Favoris();
             $favori->setIdUser($idUser);
             $favori->setRecette($recette);
             $this->entityManager->persist($favori);
+            $this->addFlash('success', 'La recette a été ajoutée à vos favoris.');
         }
 
+        // Récupérer l'URL de la page précédente
+        $referer = $request->headers->get('referer');
         $this->entityManager->flush();
 
         // Rediriger vers la page de la recette
         return $this->redirectToRoute('show_recette', ['id' => $recette->getId()]);
+
+        // Rediriger vers la page précédente ou vers la page d'accueil si le referer n'est pas disponible
+        return $referer ? $this->redirect($referer) : $this->redirectToRoute('app_accueil');
     }
 }
