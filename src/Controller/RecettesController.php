@@ -301,6 +301,7 @@ class RecettesController extends AbstractController
         $ingredient = $ing->findAll();
         $notes = $rr ->foundByNote();
         $recettes = $rr->foundByOrder();
+        $averageNotes = [];
 
         foreach ($recettes as $recette) {
             $commentaires = $cor->findBy(['recette' => $recette]);
@@ -369,7 +370,7 @@ class RecettesController extends AbstractController
         }
 
         $favori = $this->entityManager->getRepository(Favoris::class)->findOneBy([
-            'idUser' => $idUser,
+            'user' => $idUser,
             'recette' => $recette
         ]);
 
@@ -389,6 +390,9 @@ class RecettesController extends AbstractController
         // Récupérer l'URL de la page précédente
         $referer = $request->headers->get('referer');
         $this->entityManager->flush();
+
+        // Rediriger vers la page de la recette
+        return $this->redirectToRoute('show_recette', ['id' => $recette->getId()]);
 
         // Rediriger vers la page précédente ou vers la page d'accueil si le referer n'est pas disponible
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('app_accueil');
