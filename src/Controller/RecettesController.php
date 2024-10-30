@@ -17,7 +17,6 @@ use App\Repository\SaisonRepository;
 use App\Repository\UstensileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -374,8 +373,6 @@ class RecettesController extends AbstractController
             'idUser' => $idUser,
             'recette' => $recette
         ]);
-        $message = '';
-        $messageError = '';
 
         if ($favori) {
             // Si le favori existe, on le supprime
@@ -393,14 +390,6 @@ class RecettesController extends AbstractController
         // Récupérer l'URL de la page précédente
         $referer = $request->headers->get('referer');
         $this->entityManager->flush();
-        // Ajouter le message flash
-        
-        
-        
-        // Si c'est une requête AJAX, retourner une réponse JSON
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse(['message' => $message]);
-        }
 
         // Récupérer l'URL de la page précédente
         $referer = $request->headers->get('referer');
