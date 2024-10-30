@@ -10,11 +10,14 @@
         <h1>Bonjour ! </h1>        <div>
             <h2>Mes recettes</h2>
             <table>
-                {% for user in global_users.getAllUser  %}
+                {% for recette in recettesAjoutees %}
                     <tr>
-                        {# <td>{{  }}</td> #}
-                        <td> | </td>
-
+                        <td><a href="{{ path('app_recettes_show', {'id': recette.id}) }}">{{ recette.nom }}</a></td>
+                        <td><img src="{{ asset('uploads/' ~ recette.image) }}" alt="{{ recette.nom }}" class="width50"></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Vous n'avez pas encore ajouté de recettes.</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -23,11 +26,14 @@
             <h2>Mes recettes favorites</h2>
             <table>
 
-                {% for user in global_users.getAllUser %}
+                {% for favori in favoris %}
                     <tr>
-                        {# <td>{{ favoris.recette }}</td> #}
-                        <td> | </td>
-
+                        <td><a href="{{ path('app_recettes_show', {'id': favori.recette.id}) }}">{{ favori.recette.nom }}</a></td>
+                        <td><img src="{{ asset('uploads/' ~ favori.recette.image) }}" alt="{{ favori.recette.nom }}" class="width50"></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Vous n'avez pas encore ajouté de recettes dans vos favoris.</td>
                     </tr>
                 {% endfor %}
             </table>
