@@ -253,6 +253,7 @@ class RecettesController extends AbstractController
             'budget' => $budget,
             'ingredient' => $ingredient,
             'averageNote' => $averageNote,
+            'averageNotes' => $averageNotes,
             'oneRec' => $oneRec,
             'categories' => $categories,
             'difficulte' => $difficulte,
@@ -292,7 +293,6 @@ class RecettesController extends AbstractController
             ]);
         }
 
-    
     #[Route('/', name: 'app_accueil')]
     public function accueil(CategorieRepository $cr,CommentaireRepository $cor, IngredientRepository $ing,RecetteRepository $rr, SaisonRepository $sr, BudgetRepository $br): Response
     {
@@ -302,6 +302,7 @@ class RecettesController extends AbstractController
         $ingredient = $ing->findAll();
         $notes = $rr ->foundByNote();
         $recettes = $rr->foundByOrder();
+        $averageNotes = [];
 
         foreach ($recettes as $recette) {
             $commentaires = $cor->findBy(['recette' => $recette]);
@@ -379,18 +380,18 @@ class RecettesController extends AbstractController
         if ($favori) {
             // Si le favori existe, on le supprime
             $this->entityManager->remove($favori);
-            $messageError = 'La recette a été retirée de vos favoris';
-            $this->addFlash('error', $messageError);
+            $this->addFlash('error', 'La recette a été retirée de vos favoris.');
         } else {
             // Sinon, on en crée un nouveau
             $favori = new Favoris();
             $favori->setIdUser($idUser);
             $favori->setRecette($recette);
             $this->entityManager->persist($favori);
-            $message = 'La recette a bien été ajoutée à vos favoris';
-            $this->addFlash('success', $message);
+            $this->addFlash('success', 'La recette a été ajoutée à vos favoris.');
         }
 
+        // Récupérer l'URL de la page précédente
+        $referer = $request->headers->get('referer');
         $this->entityManager->flush();
         // Ajouter le message flash
         
@@ -401,8 +402,12 @@ class RecettesController extends AbstractController
             return new JsonResponse(['message' => $message]);
         }
 
-        // Rediriger vers la page de la recette
-        return $this->redirect($request->headers->get('referer'));
+        // Récupérer l'URL de la page précédente
+        $referer = $request->headers->get('referer');
+        $this->entityManager->flush();
+
+        // Rediriger vers la page précédente ou vers la page d'accueil si le referer n'est pas disponible
+        return $referer ? $this->redirect($referer) : $this->redirectToRoute('app_accueil');
 
         
     }

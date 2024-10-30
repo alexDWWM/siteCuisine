@@ -136,7 +136,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+ /**
+     * Pseudo
+     */
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
 
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
 
     /**
      * @see UserInterface
@@ -236,18 +249,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    // Getter pour pseudo
-    public function getPseudo(): ?string
-    {
-        return $this->pseudo;
-    }
-
-    // Setter pour pseudo
-    public function setPseudo(string $pseudo): self
-    {
-        $this->pseudo = $pseudo;
-
-        return $this;
-    }
-
 }
