@@ -2,10 +2,12 @@
 
 {% block body %}
 
-    <h1 class="text-center">Ingrédient</h1>
-    <div class="container d-flex flex-wrap my-4">
+    <h1 class="text-center mt-3">Ingrédients</h1>
+    <div class="container d-flex justify-content-center flex-wrap my-4">
         {% for ing in ingredient %}
-                <a href="recettes/ingredient/{{ing.id}}"><p class="m-2">{{ ing.nom }}</p></a>
-        {% endfor %}
+        <div class="m-2 iconeIngredient text-center"style="width:7rem; height:10.5rem">
+            <a href="recettes/ingredient/{{ing.id}}"><img src="{{ing.thumbnail}}" alt=""style="width:5rem; height:5rem; margin-top:5%"><p class="m-2">{{ ing.nom }}</p></a>
+       </div> 
+       {% endfor %}
     </div>
 {% endblock %}

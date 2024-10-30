@@ -24,6 +24,9 @@ class Saison
     #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'saison')]
     private Collection $recette;
 
+    #[ORM\Column(length: 255)]
+    private ?string $thumbnail = null;
+
     public function __construct()
     {
         $this->recette = new ArrayCollection();
@@ -72,6 +75,18 @@ class Saison
                 $recette->setSaison(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }
