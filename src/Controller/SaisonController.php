@@ -66,13 +66,8 @@ class SaisonController extends AbstractController
             'budget' => $budget,
             'ingredient' => $ingredient,
             'targetSaison' => $targetSaison,
-
-            
-
             'recette' => $recettes,
-            'averageNotes' => $averageNotes,
-
-            
+            'averageNotes' => $averageNotes,            
         ]);
     }
 }

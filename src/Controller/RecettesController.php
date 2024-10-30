@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Commentaire;
 use App\Entity\Favoris;
 use App\Entity\Recette;
+use App\Entity\User;
 use App\Form\AddRecettesType;
 use App\Form\CommentaireType;
 use App\Repository\CategorieRepository;
@@ -12,8 +13,10 @@ use App\Repository\CommentaireRepository;
 use App\Repository\RecetteRepository;
 use App\Repository\BudgetRepository;
 use App\Repository\DifficulteRepository;
+use App\Repository\FavorisRepository;
 use App\Repository\IngredientRepository;
 use App\Repository\SaisonRepository;
+use App\Repository\UserRepository;
 use App\Repository\UstensileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -96,7 +99,6 @@ class RecettesController extends AbstractController
         $ingredient = $ing->findAll();
         $categorie = $cr->findAll();
         $budgetName = $budgetId-> getNom();
-
         $recettes = $rr->findAll();
         $targetRecette = $budgetId->getRecettes();
 
@@ -119,14 +121,10 @@ class RecettesController extends AbstractController
             'saison' => $saison,
             'budget' => $budget,
             'ingredient' => $ingredient,
-
             'recette' => $recettes,
-
             'budgetName' => $budgetName,
             'budgetId' => $budgetId,
-
             'targetRecette' => $targetRecette,
-
             'averageNotes' => $averageNotes,
 
         ]);
@@ -168,8 +166,6 @@ class RecettesController extends AbstractController
             'recette' => $recette,
             'ingredientName' => $ingredientName,
             'ingredientId' => $ingredientId,
-
-
             'targetRecette' => $targetRecette,
             'averageNotes' => $averageNotes
 
@@ -177,13 +173,12 @@ class RecettesController extends AbstractController
     }
 
     #[Route('/recettes/{id}', name: 'app_recettes_show')]
-    public function show(RecetteRepository $rr, CommentaireRepository $cor, CategorieRepository $cr, IngredientRepository $ing, SaisonRepository $sr, BudgetRepository $br, DifficulteRepository $dr, UstensileRepository $ur, Request $request, EntityManagerInterface $entityManager, $id): Response
+    public function show(UserRepository $user, RecetteRepository $rr, CommentaireRepository $cor, CategorieRepository $cr, IngredientRepository $ing, SaisonRepository $sr, BudgetRepository $br, DifficulteRepository $dr, UstensileRepository $ur, FavorisRepository $fav, Request $request, EntityManagerInterface $entityManager, $id): Response
     { 
         $oneRec = $rr->find($id);
             if (!$oneRec) {
                 throw $this->createNotFoundException('Recette non trouvée');
             }
-        $recettes = $rr->findAll();
         $saison = $sr->findAll();
         $budget = $br->findAll();
         $ingredient = $ing->findAll();
@@ -191,6 +186,20 @@ class RecettesController extends AbstractController
         $averageNotes = [];
         $difficulte = $dr->findAll();
         $ustensile = $ur->findAll();
+        $user = $this->getUser();
+
+        // Vérifier si la recette est dans les favoris de l'utilisateur
+                
+        //$isFavorite = $fav->find($oneRec);
+        $isFavorite = false;
+        if ($user instanceof User) {
+            $favori = $fav->findOneBy([
+                'idUser' => $user,
+                'recette' => $oneRec
+            ]);
+            $isFavorite = $favori !== null;
+        }
+       
 
         // Récupérer les catégories de la recette actuelle
         $categories = $oneRec->getCategorie();
@@ -246,7 +255,9 @@ class RecettesController extends AbstractController
 
         return $this->render('recettes/show.html.twig', [
             'recette' => $oneRec,
-            'recettes' => $recettes,
+            'isFavorite' => $isFavorite,
+            'idUser' => $user,
+            'favoris' =>'$favoris',
             'categorie' => $categorie,
             'saison' => $saison,
             'budget' => $budget,
@@ -263,16 +274,13 @@ class RecettesController extends AbstractController
             'ustensile' => $ustensile,
             'commentaire' => $form->createView(),
         ]);
-
-    
     }
+
         #[Route('add/recettes', name: 'app_recettes_new')]
         public function new(Request $request, EntityManagerInterface $em): Response
         {
            
             $recette = new Recette();
-    
-            
             $form = $this->createForm(AddRecettesType::class, $recette);
             $form->handleRequest($request);
     
@@ -301,6 +309,7 @@ class RecettesController extends AbstractController
         $ingredient = $ing->findAll();
         $notes = $rr ->foundByNote();
         $recettes = $rr->foundByOrder();
+        $averageNotes = [];
 
         foreach ($recettes as $recette) {
             $commentaires = $cor->findBy(['recette' => $recette]);
@@ -361,7 +370,7 @@ class RecettesController extends AbstractController
  
     #[Route('/recette/{id}/favori', name:"ajout_favori")]
 
-    public function ajoutFavori(Recette $recette): Response
+    public function ajoutFavori(Recette $recette, Request $request): Response
     {
         $idUser = $this->getUser(); // S'assurer que l'utilisateur est connecté
         if (!$idUser) {
@@ -376,17 +385,26 @@ class RecettesController extends AbstractController
         if ($favori) {
             // Si le favori existe, on le supprime
             $this->entityManager->remove($favori);
+            $this->addFlash('error', 'La recette a été retirée de vos favoris.');
         } else {
             // Sinon, on en crée un nouveau
             $favori = new Favoris();
             $favori->setIdUser($idUser);
             $favori->setRecette($recette);
             $this->entityManager->persist($favori);
+            $this->addFlash('success', 'La recette a été ajoutée à vos favoris.');
         }
 
+        // Récupérer l'URL de la page précédente
+        $referer = $request->headers->get('referer');
         $this->entityManager->flush();
 
-        // Rediriger vers la page de la recette
-        return $this->redirectToRoute('app_accueil');
+        // Récupérer l'URL de la page précédente
+        $referer = $request->headers->get('referer');
+        $this->entityManager->flush();
+
+        // Rediriger vers la page précédente ou vers la page d'accueil si le referer n'est pas disponible
+        return $referer ? $this->redirect($referer) : $this->redirectToRoute('app_accueil');
     }
+    
 }

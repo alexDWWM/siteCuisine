@@ -136,7 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
+ /**
      * Pseudo
      */
     public function getPseudo(): ?string

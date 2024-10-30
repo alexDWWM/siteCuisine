@@ -24,6 +24,9 @@ class Categorie
     #[ORM\ManyToMany(targetEntity: Recette::class, mappedBy: 'categorie')]
     private Collection $recettes;
 
+    #[ORM\Column(length: 255)]
+    private ?string $thumbnail = null;
+
     public function __construct()
     {
         $this->recettes = new ArrayCollection();
@@ -69,6 +72,18 @@ class Categorie
         if ($this->recettes->removeElement($recette)) {
             $recette->removeCategorie($this);
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

@@ -3,16 +3,12 @@
 {% block body %}
 
         <h1 class="text-center mt-3">Recettes par Catégories</h1>
-        <div class="container d-flex justify-content-center mt-5" style="min-height:30em">
+        <div class="mt-5 d-flex justify-content-center flex-wrap">
         {% for cat in categorie %}
             {% if cat.nom == 'Saison' %}
-            <div>
-                <a href="saison/" ><p class="me-5">{{cat.nom}}</p></a>
-            </div> 
+                <a href="saison/" ><div class="m-2 text-center"><i class="{{cat.thumbnail}}"></i><p>{{cat.nom}}</p></div></a>
             {% else %}
-            <div>
-                <a href="categorie/{{cat.id}}" ><p class="me-5">{{cat.nom}}</p></a>
-            </div> 
+                <a href="categorie/{{cat.id}}"><div class="m-2 text-center"><i class="{{cat.thumbnail}}"></i><p>{{cat.nom}}</p></div></a>
             {% endif %} 
         {% endfor %}
         </div>
