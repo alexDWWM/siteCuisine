@@ -24,7 +24,7 @@
             {{ message }}
         </div>
     {% endfor %}
-
+   
     {% if recette == null %}
         Aucune recette existe avec cet ingredient.
         Ajouter une recette.
@@ -32,7 +32,15 @@
     <div class="container">
         <div class="d-flex gap-2">
             <h1>{{ recette.nom }}</h1>
-            <div class="favoris"><a href="{{ path('ajout_favori', {'id': recette.id}) }}"><i class="far fa-star" id="etoile"></a></i></div>
+            <div class="favoris">
+                <a href="{{ path('ajout_favori', {'id': recette.id}) }}">
+                {% if isFavorite %}
+                    <i class="fas fa-star" id="etoile" style="color: black;"></i>
+                {% else %}
+                    <i class="far fa-star" id="etoile"></i>
+                {% endif %}
+            </a>
+            </div>
         </div>
 
         <div class="">
