@@ -96,7 +96,6 @@ class RecettesController extends AbstractController
         $ingredient = $ing->findAll();
         $categorie = $cr->findAll();
         $budgetName = $budgetId-> getNom();
-
         $recettes = $rr->findAll();
         $targetRecette = $budgetId->getRecettes();
 
@@ -119,14 +118,10 @@ class RecettesController extends AbstractController
             'saison' => $saison,
             'budget' => $budget,
             'ingredient' => $ingredient,
-
             'recette' => $recettes,
-
             'budgetName' => $budgetName,
             'budgetId' => $budgetId,
-
             'targetRecette' => $targetRecette,
-
             'averageNotes' => $averageNotes,
 
         ]);

@@ -2,10 +2,10 @@
 
 {% block body %}
 
-        <h1 class="text-center">Recettes de saison</h1>
+        <h1 class="text-center mt-3">Recettes de saison</h1>
+        <div class="mt-5 d-flex justify-content-center flex-wrap">
         {% for sai in saison %}
-            <div>
-                <a href="saison/show/{{sai.id}}" ><p class="me-5">{{sai.nom}}</p></a>
-            </div>  
+            <a href="saison/show/{{sai.id}}" ><div class="m-3 text-center"><i class="{{sai.thumbnail}}"></i><p class="mt-3">{{sai.nom}}</p></div></a>
         {% endfor %}
+        </div>
 {% endblock %}
