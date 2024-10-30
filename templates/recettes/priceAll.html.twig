@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="text-center">Tarif par Budget</h1>
+    <h1 class="text-center mt-3">Tarif par Budget</h1>
     <section class="mt-5 d-flex justify-content-center flex-wrap">
         <div class="m-4 text-center">
-            <a href="/recettes/price/{{budget.0.id}}"><i class="fa-solid fa-euro-sign fa-2xl"></i><p>{{budget.0.nom}}</p></a>
+            <a href="/recettes/price/{{budget.0.id}}"><i class="fa-solid fa-euro-sign fa-2xl"></i><p class="mt-2">{{budget.0.nom}}</p></a>
         </div>
         <div class="m-4 text-center">
-            <a href="/recettes/price/{{budget.1.id}}"><i class="fa-solid fa-euro-sign fa-2xl"></i><i class="fa-solid fa-euro-sign fa-2xl"></i><p>{{budget.1.nom}}</p></a>
+            <a href="/recettes/price/{{budget.1.id}}"><i class="fa-solid fa-euro-sign fa-2xl"></i><i class="fa-solid fa-euro-sign fa-2xl"></i><p class="mt-2">{{budget.1.nom}}</p></a>
         </div>
         <div class="m-4 text-center">
-            <a href="/recettes/price/{{budget.2.id}}"><i class="fa-solid fa-euro-sign fa-2xl"></i><i class="fa-solid fa-euro-sign fa-2xl"></i><i class="fa-solid fa-euro-sign fa-2xl"></i><p>{{budget.2.nom}}</p></a>
+            <a href="/recettes/price/{{budget.2.id}}"><i class="fa-solid fa-euro-sign fa-2xl"></i><i class="fa-solid fa-euro-sign fa-2xl"></i><i class="fa-solid fa-euro-sign fa-2xl"></i><p class="mt-2">{{budget.2.nom}}</p></a>
         </div>
     </section>        
     

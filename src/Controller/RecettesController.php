@@ -163,8 +163,6 @@ class RecettesController extends AbstractController
             'recette' => $recette,
             'ingredientName' => $ingredientName,
             'ingredientId' => $ingredientId,
-
-
             'targetRecette' => $targetRecette,
             'averageNotes' => $averageNotes
 
