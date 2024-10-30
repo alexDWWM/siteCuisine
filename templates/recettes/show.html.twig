@@ -3,6 +3,17 @@
 {% block title %}Bistroquet{% endblock %}
 {% block body %}
 
+    {% for message in (app.flashes('success')) %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}  
+    {% for message in (app.flashes('error')) %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}  
+
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
             {{ message }}
@@ -13,7 +24,7 @@
             {{ message }}
         </div>
     {% endfor %}
-
+   
     {% if recette == null %}
         Aucune recette existe avec cet ingredient.
         Ajouter une recette.
@@ -21,7 +32,15 @@
     <div class="container">
         <div class="d-flex gap-2">
             <h1>{{ recette.nom }}</h1>
-            <div class="favoris"><a href="{{ path('ajout_favori', {'id': recette.id}) }}"><i class="far fa-star" id="etoile"></a></i></div>
+            <div class="favoris">
+                <a href="{{ path('ajout_favori', {'id': recette.id}) }}">
+                {% if isFavorite %}
+                    <i class="fas fa-star" id="etoile" style="color: black;"></i>
+                {% else %}
+                    <i class="far fa-star" id="etoile"></i>
+                {% endif %}
+            </a>
+            </div>
         </div>
 
         <div class="">

@@ -40,4 +40,14 @@ class FavorisRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    // src/Repository/FavorisRepository.php
+
+    public function getFavorisByUser($user)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.idUser = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 }
