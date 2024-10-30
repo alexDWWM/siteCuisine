@@ -32,7 +32,7 @@
     <div class="container">
         <div class="d-flex gap-2">
             <h1>{{ recette.nom }}</h1>
-            <div class="favoris">
+            <div class="favoris align-self-center ms-2">
                 <a href="{{ path('ajout_favori', {'id': recette.id}) }}">
                 {% if isFavorite %}
                     <i class="fas fa-star" id="etoile" style="color: black;"></i>
