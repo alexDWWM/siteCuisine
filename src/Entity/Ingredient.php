@@ -30,6 +30,9 @@ class Ingredient
     #[ORM\ManyToOne(inversedBy: 'ingredient')]
     private ?UniteDeMesure $uniteDeMesure = null;
 
+    #[ORM\OneToMany(targetEntity: RecetteIngredient::class, mappedBy: 'ingredient', cascade: ['persist', 'remove'])]
+    private $recetteIngredients;
+
     public function __construct()
     {
         $this->recettes = new ArrayCollection();

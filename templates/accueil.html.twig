@@ -2,11 +2,9 @@
 
 {% block body %}
 <div class='container'>
-    <article class="patieBlog">
-        
-    </article>
+    
     <article class="theme container text-center">
-        <h5>Recette par Thématiques</h5>
+        <small><a href="/categorie">Recette par Thématique</a></small>
         <div class="mt-3 d-flex justify-content-center flex-wrap" id="themeAccueil">
             {% for categorie in categorie %}
                 {% if categorie.nom == 'saison' %}
@@ -87,6 +85,9 @@
         </div>
     {% endfor %}
     </div>
+    </article>
+    <article class="partieBlog">
+        
     </article>
 </div>
 {% endblock %}

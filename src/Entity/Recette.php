@@ -51,6 +51,9 @@ class Recette
      */
     #[ORM\ManyToMany(targetEntity: Ingredient::class, inversedBy: 'recettes')]
     private Collection $ingredient;
+    
+    #[ORM\OneToMany(targetEntity: RecetteIngredient::class, mappedBy: 'recette', cascade: ['persist', 'remove'])]
+    private $recetteIngredients;
 
     /**
      * @var Collection<int, Favoris>
