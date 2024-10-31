@@ -5,9 +5,9 @@
 
      <div class="d-flex flex-wrap justify-content-center">
         {% for recette in targetRecette %}
-            <div class="card p-2 m-2 w-25 align-center">
+            <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
             <img src="{{ recette.image }}" alt="{{ recette.nom }}">
-            <a href="/recettes/{{ recette.id }}"><h3 style="overflow:hidden; height:4em">{{ recette.nom }}</h3></a>
+            <a href="/recettes/{{ recette.id }}"><h3>{{ recette.nom }}</h3></a>
             <p>{{ averageNotes[recette.id]|number_format(1) }}</p>  
             <span class="toques-container">
                 {% set note = averageNotes[recette.id] %}

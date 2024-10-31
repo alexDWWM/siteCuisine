@@ -8,9 +8,9 @@
     <div class="d-flex flex-wrap justify-content-center">
         {% for recettes in recette %}
             {% if (recettes.saison.id == targetSaison.id) %}
-               <div class="card p-2 m-2 w-25 align-center">
+               <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
                     <img src="{{ recettes.image }}" alt="{{ recettes.nom }}">
-                    <a href="/recettes/{{ recettes.id }}"><h3 style="overflow:hidden; height:4em">{{ recettes.nom }}</h3></a>
+                    <a href="/recettes/{{ recettes.id }}"><h3>{{ recettes.nom }}</h3></a>
                     <p>{{ averageNotes[recettes.id]|number_format(1) }}</p>  
                     <span class="toques-container">
                     {% set note = averageNotes[recettes.id] %}

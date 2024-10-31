@@ -317,7 +317,7 @@ class RecettesController extends AbstractController
             $count = count($commentaires);
 
             foreach ($commentaires as $commentaire) {
-                $totalNotes += (float)$commentaire->getNote();
+                $totalNotes += $commentaire->getNote();
             }
 
             $averageNotes[$recette->getId()] = $count > 0 ? $totalNotes / $count : null;
