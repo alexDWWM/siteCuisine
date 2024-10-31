@@ -6,12 +6,11 @@
 
         <div class="d-flex flex-wrap justify-content-center">
         {% for recette in recettes %}
-            <div class="card p-2 m-2 w-25 align-center">
+            <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
             <img src="{{ recette.image }}" alt="{{ recette.nom }}">
-            <a href="/recettes/{{ recette.id }}"><h3 style="overflow:hidden; height:4em">{{ recette.nom }}</h3></a>
-
+            <a href="/recettes/{{ recette.id }}"><h3>{{ recette.nom }}</h3></a>
             <p>{{ averageNotes[recette.id]|number_format(1) }}</p>  
-           <span class="toques-container">
+             <span class="toques-container">
                 {% set note = averageNotes[recette.id] %}
                     {% for i in 1..5 %}
                         {% if i <= note %}
@@ -34,8 +33,6 @@
                     {% endfor %}
             </span>
         </div>
-
-    </div>
 {% endfor %}
 
 

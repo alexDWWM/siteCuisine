@@ -9,10 +9,10 @@
         <h5>Recette par Thématiques</h5>
         <div class="mt-3 d-flex justify-content-center flex-wrap" id="themeAccueil">
             {% for categorie in categorie %}
-                {% if categorie.nom == 'Saison' %}
-                    <a href="/saison"><div class="m-2 text-center"><i class="{{categorie.thumbnail}}"></i><p>{{categorie.nom}}</p></div></a>
+                {% if categorie.nom == 'saison' %}
+                    <a href="/saison"><div class="m-2 text-center"><i class="{{categorie.thumbnail}}"></i><p style="text-transform:capitalize">{{categorie.nom}}</p></div></a>
                 {% else %}
-                    <a href="/categorie/{{categorie.id}}"><div class="m-2 text-center"><i class="{{categorie.thumbnail}}"></i><p>{{categorie.nom}}</p></div></a>
+                    <a href="/categorie/{{categorie.id}}"><div class="m-2 text-center"><i class="{{categorie.thumbnail}}"></i><p style="text-transform:capitalize">{{categorie.nom}}</p></div></a>
                 {% endif %}
             {% endfor %}
         </div>
@@ -24,7 +24,7 @@
         {% for recette in note %}
             <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
                 <img src="{{ recette.image }}" alt="{{ recette.nom }}">
-                <a href="/recettes/{{ recette.id }}"><h3 style="overflow:hidden; height:3.5em">{{ recette.nom }}</h3></a>
+                <a href="/recettes/{{ recette.id }}"><h3>{{ recette.nom }}</h3></a>
                  <p>{{ averageNotes[recette.id]|number_format(1) }}</p>  
                 <span class="toques-container">
 
@@ -59,7 +59,7 @@
     {% for recette in recettes %}
         <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
             <img src="{{ recette.image }}" alt="{{ recette.nom }}">
-            <a href="/recettes/{{ recette.id }}"><h3 style="overflow:hidden; height:3.5em">{{ recette.nom }}</h3></a>
+            <a href="/recettes/{{ recette.id }}"><h3>{{ recette.nom }}</h3></a>
             <p>{{ averageNotes[recette.id]|number_format(1) }}</p>  
              <span class="toques-container">
                 {% set note = averageNotes[recette.id] %}

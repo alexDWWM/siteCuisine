@@ -83,8 +83,12 @@ h2 {
     padding-right: 5%;
     
 }
-
-
+h3{
+    overflow:hidden; 
+    height:3.5em; 
+    text-transform:capitalize; 
+    margin-top:2%;
+}
 
 
 /******************************************************************/
