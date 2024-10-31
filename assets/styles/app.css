@@ -6,6 +6,15 @@ body {
     margin: 0;
 }
 
+h3{
+    overflow:hidden; 
+    height:3.5em; 
+    text-transform:capitalize; 
+    margin-top:2%;
+}
+img{
+    border-radius: 5px;
+}
 
 main {
     flex: 1;
@@ -120,13 +129,6 @@ h2 {
     padding-right: 5%;
     
 }
-h3{
-    overflow:hidden; 
-    height:3.5em; 
-    text-transform:capitalize; 
-    margin-top:2%;
-}
-
 
 /******************************************************************/
 /**                           FOOTER                             **/
