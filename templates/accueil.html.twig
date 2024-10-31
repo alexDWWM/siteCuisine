@@ -19,7 +19,7 @@
     </article>
    
     <article>
-    <h5>Top recettes :</h5>
+    <h2 class="mt-5">Top recettes</h2>
     <div class="d-flex flex-wrap justify-content-center">
         {% for recette in note %}
             <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
@@ -51,10 +51,11 @@
                 </span>
             </div>
         {% endfor %}
+        <small><a href="/recettes" class="bold"><i class="fa-solid fa-circle-right"></i>&nbsp&nbspConsulter toutes les recettes</a></small>
         </div>
     </article>
     <article>
-    <h5>Dernières Recettes:</h5>
+    <h2 class="mt-5">Dernières Recettes</h2>
     <div class="d-flex flex-wrap justify-content-center">
     {% for recette in recettes %}
         <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
