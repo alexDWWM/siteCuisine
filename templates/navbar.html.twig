@@ -51,7 +51,7 @@
                         {% if category.nom == 'Saison' %}
                         {% else %}
                         <div>
-                            <a href="/categorie/{{category.id}}" ><p class="me-5">{{category.nom}}</p></a>
+                            <a href="/categorie/{{category.id}}" ><p class="me-5" style="text-transform:capitalize">{{category.nom}}</p></a>
                         </div>                       
                         {% endif %}
                     {% endfor %}
