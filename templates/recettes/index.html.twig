@@ -11,7 +11,7 @@
         {% for recette in recettes %}
            <div class="card p-2 m-2 w-25 align-center" style="min-width:9em; max-width:17em">
                 <img src="\uploads\{{ recette.image }}" alt="{{ recette.nom }}"style="width:100%; height: 50%">
-                <a href="/recettes/{{ recette.id }}"><h3>{{ recette.nom }}</h3></a>
+                <a href="/recettes/{{ recette.id }}"><p class="bold">{{ recette.nom }}</p></a>
                 {% set note = averageNotes[recette.id] is defined ? averageNotes[recette.id] : 0 %}
                 {% if note == 0 %}
                     <p>Pas de note encore</p>
