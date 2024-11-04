@@ -69,8 +69,7 @@
                 {% if note == 0 %}
                     <p>Pas de note encore</p>
                 {% else %}
-                    <p>{{note}}</p>
-                {% endif %}  
+                <p>{{note}}</p>
                 <span class="toques-container">
                     {% for i in 1..5 %}
                         {% if i <= note %}
@@ -92,6 +91,7 @@
                         {% endif %}
                     {% endfor %}
             </span>
+            {% endif %}
         </div>
     {% endfor %}
     </div>
