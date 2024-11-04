@@ -59,7 +59,7 @@ class ProfilController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre profil a été mis à jour avec succès');
-            return $this->redirectToRoute('app_profil_modif');
+            return $this->redirectToRoute('app_profil');
         }
 
         return $this->render('profil/modif.html.twig', [
