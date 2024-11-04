@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h1>Modifier mon profil</h1>
+        {{ form_start(form) }}
+            {{ form_row(form.pseudo) }}
+            {{ form_row(form.plainPassword.first) }}
+            {{ form_row(form.plainPassword.second) }}
+        
+            <button type="submit" class="buttonA">Enregistrer les modifications</button>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

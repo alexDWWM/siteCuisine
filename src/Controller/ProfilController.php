@@ -2,11 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\ProfilModifType;
 use App\Repository\FavorisRepository;
 use App\Repository\RecetteRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ProfilController extends AbstractController
 {
@@ -30,5 +37,58 @@ class ProfilController extends AbstractController
             'favoris' => $favoris,
         ]);
     }
-}
 
+    #[Route('/profil/modif/{id}', name: 'app_profil_modif')]
+    public function modif(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, User $user, $id): Response
+    {
+        // Vérifier si l'utilisateur est connecté
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour modifier votre profil.');
+        }
+        $form = $this->createForm(ProfilModifType::class, $user);
+        $form->handleRequest($request);
+        $url = $this->generateUrl('app_profil_modif', ['id' => $user->getUserIdentifier()]);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($password = $form->get('plainPassword')->getData()) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $password);
+                $user->setPassword($hashedPassword);
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre profil a été mis à jour avec succès');
+            return $this->redirectToRoute('app_profil_modif');
+        }
+
+        return $this->render('profil/modif.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/profil/suppr/{id}', name: 'app_profil_suppr', methods: ['POST'])]
+    public function supprProfil(Request $request, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, $id): Response
+    {
+        $user = $this->getUser();
+        
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour supprimer votre profil.');
+        }
+    
+        if ($this->isCsrfTokenValid('suppr-profil', $request->request->get('_token'))) {
+            // Déconnexion de l'utilisateur
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
+    
+            // Suppression de l'utilisateur
+            $entityManager->remove($user);
+            $entityManager->flush();
+    
+            $this->addFlash('success', 'Votre profil a été supprimé avec succès.');
+    
+            return $this->redirectToRoute('app_home');
+        }
+    }
+
+}
