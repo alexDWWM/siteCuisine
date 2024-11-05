@@ -27,6 +27,9 @@ class Ingredient
     #[ORM\OneToMany(targetEntity: Quantite::class, mappedBy: 'ingredient')]
     private Collection $quantites;
 
+    #[ORM\OneToMany(targetEntity: RecetteIngredient::class, mappedBy: 'ingredient', cascade: ['persist', 'remove'])]
+    private $recetteIngredients;
+
     public function __construct()
     {
         $this->nom = new ArrayCollection();
