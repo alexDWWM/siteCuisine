@@ -39,11 +39,7 @@ class AddRecettesType extends AbstractType
                 'choice_label' => 'nom',
                 'multiple' => true,
             ])
-            ->add('ingredient', EntityType::class, [
-                'class' => Ingredient::class,
-                'choice_label' => 'nom',
-                'multiple' => true,
-            ])
+
             ->add('difficulte', EntityType::class, [
                 'class' => Difficulte::class,
                 'choice_label' => 'nom',
