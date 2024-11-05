@@ -92,9 +92,9 @@
                 {% for ingredient in ingredients %}
                     <table>
                         <tr>
-                            <td><img src="{{ ingredient.thumbnail }}" class="ingredient-image" alt="image de {{ ingredient.nom }}"></img></td>
-                            <td>&nbsp;{{ ingredient.nom }}</td>
-                            <td> Quantité : </td>
+                            <td><img src="{{ ingredient.ingredient.thumbnail }}" class="ingredient-image" alt="image de {{ ingredient.ingredient.nom }}"></img></td>
+                            <td>&nbsp;{{ ingredient.ingredient.nom }}</td>
+                            <td> - Quantité : {{ ingredient.quantite}}{{ ingredient.unite}}</td>
                         </tr>
                     </table>
                 {% endfor %}
@@ -123,9 +123,14 @@
                             
                             <img src="{{ recette.image }}" alt="" class="height100">
                             <a href="/recettes/{{recette.id}}"><h3>{{ recette.nom }}</h3></a>
-                            <p>{{ averageNotes[recette.id]|number_format(1) }}</p>  
+                            {% set note = averageNotes[recette.id] is defined ? averageNotes[recette.id] : 0 %}
+                            {% if note == 0 %}
+                                <p>Pas de note encore</p>
+                            {% else %}
+                                <p>{{note}}</p>
+                            
+                                        
                             <span class="toques-container">
-                                {% set note = averageNotes[recette.id] %}
                                     {% for i in 1..5 %}
                                         {% if i <= note %}
                                         <!-- Afficher la toque pleine -->
@@ -146,6 +151,7 @@
                                         {% endif %}
                                     {% endfor %}
                             </span>
+                           {% endif %}  
                         </div>
                     </div>
                 {% endfor %}

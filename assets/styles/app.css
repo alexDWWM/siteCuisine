@@ -100,7 +100,6 @@ h2 {
 /******************************************************************/
 .iconeIngredient{
     box-shadow: 10px 10px 5px rgb(92, 84, 84);
-    border: 1px solid rgba(128, 128, 128, 0.445);
     overflow: hidden;
     text-transform: capitalize;
 }

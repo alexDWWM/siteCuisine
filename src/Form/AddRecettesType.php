@@ -41,17 +41,7 @@ class AddRecettesType extends AbstractType
                 'choice_label' => 'nom',
                 'multiple' => true,
             ])
-            ->add('ingredient', EntityType::class, [
-                // 'class' => IngredientAutocompleteField::class,
-                'quantite' => NumberType::class,
-                'multiple' => true,
-            ])
-            ->add('recetteIngredients', CollectionType::class, [
-                'entry_type' => RecetteIngredientType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ])
+
             ->add('difficulte', EntityType::class, [
                 'class' => Difficulte::class,
                 'unite' => TextType::class,
