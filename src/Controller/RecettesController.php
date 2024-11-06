@@ -7,8 +7,12 @@ use App\Entity\Favoris;
 use App\Entity\Quantite;
 use App\Entity\Recette;
 use App\Entity\User;
+use App\Form\AddIngredientsType;
 use App\Form\AddRecettesType;
 use App\Form\ChoiceUstensileType;
+use App\Form\AddTagType;
+use App\Form\AddEtapesType;
+use App\Form\AddUstensileType;
 use App\Form\CommentaireType;
 use App\Form\QuantiteType;
 use App\Repository\CategorieRepository;
@@ -78,6 +82,7 @@ class RecettesController extends AbstractController
             'ingredient' => $ingredient,
         ]);
     }
+
     #[Route('/recettes/price', name: 'app_recettes_priceAll')]
     public function priceAll(CategorieRepository $cr, IngredientRepository $ing, SaisonRepository $sr, BudgetRepository $br, RecetteRepository $rr): Response
     { 
@@ -142,8 +147,6 @@ class RecettesController extends AbstractController
     }
 
     #[Route('/recettes/ingredient/{id}', name: 'app_recettes_ingredient')]
-
-
     public function ingredient(CategorieRepository $cr,$id,CommentaireRepository $cor, IngredientRepository $ing, SaisonRepository $sr, BudgetRepository $br, RecetteRepository $rr): Response
 
     { 
@@ -325,15 +328,25 @@ class RecettesController extends AbstractController
                 $recette ->setDate(new DateTimeImmutable('today'));
                 $em->persist($recette);
                 $em->flush();
+                
     
                 // Rediriger vers la liste des recettes
                 return $this->redirectToRoute('app_recette_add.');
             }
+                $form1 = $this->createForm(AddUstensileType::class);
+                $form2 = $this->createForm(AddIngredientsType::class);
+                $form3 = $this->createForm(AddTagType::class);
+                $form4 = $this->createForm(AddEtapesType::class);
     
             // Afficher le formulaire
             return $this->render('recettes/add.html.twig', [
                 'form' => $form->createView(),
+                'form1' => $form1->createView(),
+                'form2' => $form2->createView(),
+                'form3' => $form3->createView(),
+                'form4' => $form4->createView(),
             ]);
+
         }
 
         #[Route('/add/recettes.', name: 'app_recette_add.')]
@@ -497,4 +510,6 @@ class RecettesController extends AbstractController
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('app_accueil');
     }
     
+   
+
 }
