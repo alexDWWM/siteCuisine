@@ -31,12 +31,7 @@ class AddRecettesType extends AbstractType
             ])
             ->add('temps')
             ->add('description')
-                  
-            ->add('ustensile', EntityType::class, [
-                'class' => Ustensile::class,
-                'choice_label' => 'nom',
-                'multiple' => true,
-            ])
+
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nom',
@@ -45,7 +40,7 @@ class AddRecettesType extends AbstractType
 
             ->add('difficulte', EntityType::class, [
                 'class' => Difficulte::class,
-                'unite' => TextType::class,
+               
             ])
             ->add('budget', EntityType::class, [
                 'class' => Budget::class,

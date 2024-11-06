@@ -8,6 +8,7 @@ use App\Entity\Quantite;
 use App\Entity\Recette;
 use App\Entity\User;
 use App\Form\AddRecettesType;
+use App\Form\ChoiceUstensileType;
 use App\Form\CommentaireType;
 use App\Form\QuantiteType;
 use App\Repository\CategorieRepository;
@@ -336,14 +337,14 @@ class RecettesController extends AbstractController
         }
 
         #[Route('/add/recettes.', name: 'app_recette_add.')]
-        public function newQ(Request $request,RecetteRepository $rr,EntityManagerInterface $em,): Response
+        public function newQ(Request $request,RecetteRepository $rr,EntityManagerInterface $em): Response
         {
             $newQ = new Quantite();
             $formulaire = $this->createForm(QuantiteType::class, $newQ);
             $formulaire->handleRequest($request);
             $recette = $rr->findOneBy([], ['id' => 'DESC']);
             $ingredient = $recette -> getQuantites();
-
+        
             if ($formulaire->isSubmitted() && $formulaire->isValid()) {
                 $newQ = $formulaire ->getData();
                 $newQ -> setRecette($recette);
@@ -353,9 +354,38 @@ class RecettesController extends AbstractController
                 return $this->redirectToRoute('app_recette_add.');
 
                 }
+               
                 return $this->render('recettes/ingredientRecette.html.twig', [
                     'formulaire' => $formulaire->createView(),
                     'ingredient' => $ingredient,
+
+                ]);
+        }
+        #[Route('/add/recettes..', name: 'app_recette_add..')]
+        public function addU(Request $request,RecetteRepository $rr,EntityManagerInterface $em): Response
+        {
+            $recette = $rr->findOneBy([], ['id' => 'DESC']);
+            $ustensile = $recette->getUstensile();
+            $formulaire = $this->createForm(ChoiceUstensileType::class, $recette);
+            $formulaire->handleRequest($request);
+            
+
+            
+        
+            if ($formulaire->isSubmitted() && $formulaire->isValid()) {
+                
+                $em->persist($recette);
+                $em->flush();
+
+               
+                return $this->redirectToRoute('app_recette_add..');
+
+                }
+               
+                return $this->render('recettes/test.html.twig', [
+                    'formulaire' => $formulaire->createView(),
+                    'ustensile' => $ustensile,
+
                 ]);
         }
 
