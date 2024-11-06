@@ -5,16 +5,18 @@ namespace App\Form;
 use App\Entity\Budget;
 use App\Entity\Categorie;
 use App\Entity\Difficulte;
-use App\Entity\Ingredient;
 use App\Entity\Recette;
 use App\Entity\Saison;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\Ustensile;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -43,7 +45,7 @@ class AddRecettesType extends AbstractType
 
             ->add('difficulte', EntityType::class, [
                 'class' => Difficulte::class,
-                'choice_label' => 'nom',
+                'unite' => TextType::class,
             ])
             ->add('budget', EntityType::class, [
                 'class' => Budget::class,
@@ -68,4 +70,6 @@ class AddRecettesType extends AbstractType
             'data_class' => Recette::class,
         ]);
     }
+
+    
 }
