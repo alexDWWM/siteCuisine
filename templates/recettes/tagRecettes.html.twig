@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les mots clés de la recette{% endblock %}
+
+{% block body %}
+{{ form(formulaire)}}
+{% for tags in tag %}
+    <div>
+        {{tag.nom}}
+    </div>
+    {% endfor %}
+{% endblock %}
