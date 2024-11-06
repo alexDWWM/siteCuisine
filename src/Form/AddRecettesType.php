@@ -31,33 +31,49 @@ class AddRecettesType extends AbstractType
             ->add('temps')
             ->add('description')
                   
-            ->add('ustensile', EntityType::class, [
-                'class' => Ustensile::class,
-                'choice_label' => 'nom',
-                'multiple' => true,
-            ])
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nom',
                 'multiple' => true,
+                'expanded' => true, // Transforme le select en checkboxes
+                'label' => 'Catégories',
+                'label_attr' => ['class' => 'checkbox-inline'],
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['class' => 'form-check-input'];
+                },
             ])
-
             ->add('difficulte', EntityType::class, [
                 'class' => Difficulte::class,
-                'unite' => TextType::class,
+                'choice_label' => 'nom',
+                'multiple' => false,
+                'expanded' => true, // Transforme le select en checkboxes
+                'label' => 'Difficulté',
+                'label_attr' => ['class' => 'checkbox-inline'],
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['class' => 'form-check-input'];
+                },
             ])
             ->add('budget', EntityType::class, [
                 'class' => Budget::class,
                 'choice_label' => 'nom',
-            ])
-            ->add('tags', EntityType::class, [
-                'class' => Tag::class,
-                'choice_label' => 'nom',
-                'multiple' => true,
+                'multiple' => false,
+                'expanded' => true, // Transforme le select en checkboxes
+                'label' => 'Budget',
+                'label_attr' => ['class' => 'checkbox-inline'],
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['class' => 'form-check-input'];
+                },
             ])
             ->add('saison', EntityType::class, [
                 'class' => Saison::class,
                 'choice_label' => 'nom',
+                'multiple' => false,
+                'expanded' => true, // Transforme le select en checkboxes
+                'label' => 'Saison',
+                'label_attr' => ['class' => 'checkbox-inline'],
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['class' => 'form-check-input'];
+                },
             ])
         ;
     }
