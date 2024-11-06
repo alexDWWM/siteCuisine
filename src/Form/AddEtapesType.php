@@ -11,7 +11,8 @@ class addEtapesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('etape')
+            ->add('description')
+            ->add('nom')
         ;
     }
 
