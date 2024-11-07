@@ -53,5 +53,17 @@ class RecetteRepository extends ServiceEntityRepository
         ;
     }
 
+    public function foundByUser($idUser)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.idUser = :val')
+            ->setParameter(':val', $idUser)
+            ->orderBy('r.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     
 }
