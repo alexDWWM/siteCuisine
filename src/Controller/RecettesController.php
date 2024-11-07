@@ -9,6 +9,7 @@ use App\Entity\Recette;
 use App\Entity\User;
 use App\Form\AddIngredientsType;
 use App\Form\AddRecettesType;
+use App\Form\ChoiceUstensileType;
 use App\Form\AddTagType;
 use App\Form\AddEtapesType;
 use App\Form\AddUstensileType;
@@ -325,12 +326,19 @@ class RecettesController extends AbstractController
                 $recette = $form ->getData();
                 $recette ->setidUser($user);
                 $recette ->setDate(new DateTimeImmutable('today'));
-                $em->persist($recette);
-                $em->flush();
+                $Fcategorie = $recette->getCategorie();
+                if ($Fcategorie) {
+                    foreach ($Fcategorie as $category) {
+                    
+                         dump($category); // Cela montre l'objet de catégorie
+                        $recette->addCategorie($category); // Ajoute la catégorie à la recette
+                    }
+                }
                 
-    
-                // Rediriger vers la liste des recettes
-                return $this->redirectToRoute('app_recette_add.');
+                //$data -> addCategorie($Fcategorie);
+                $em->persist($recette);
+                $em->flush();   
+                
             }
                 $form1 = $this->createForm(AddUstensileType::class);
                 $form2 = $this->createForm(AddIngredientsType::class);
@@ -349,14 +357,14 @@ class RecettesController extends AbstractController
         }
 
         #[Route('/add/recettes.', name: 'app_recette_add.')]
-        public function newQ(Request $request,RecetteRepository $rr,EntityManagerInterface $em,): Response
+        public function newQ(Request $request,RecetteRepository $rr,EntityManagerInterface $em): Response
         {
             $newQ = new Quantite();
             $formulaire = $this->createForm(QuantiteType::class, $newQ);
             $formulaire->handleRequest($request);
             $recette = $rr->findOneBy([], ['id' => 'DESC']);
             $ingredient = $recette -> getQuantites();
-
+        
             if ($formulaire->isSubmitted() && $formulaire->isValid()) {
                 $newQ = $formulaire ->getData();
                 $newQ -> setRecette($recette);
@@ -366,9 +374,38 @@ class RecettesController extends AbstractController
                 return $this->redirectToRoute('app_recette_add.');
 
                 }
+               
                 return $this->render('recettes/ingredientRecette.html.twig', [
                     'formulaire' => $formulaire->createView(),
                     'ingredient' => $ingredient,
+
+                ]);
+        }
+        #[Route('/add/recettes..', name: 'app_recette_add..')]
+        public function addU(Request $request,RecetteRepository $rr,EntityManagerInterface $em): Response
+        {
+            $recette = $rr->findOneBy([], ['id' => 'DESC']);
+            $ustensile = $recette->getUstensile();
+            $formulaire = $this->createForm(ChoiceUstensileType::class, $recette);
+            $formulaire->handleRequest($request);
+            
+
+            
+        
+            if ($formulaire->isSubmitted() && $formulaire->isValid()) {
+                
+                $em->persist($recette);
+                $em->flush();
+
+               
+                return $this->redirectToRoute('app_recette_add..');
+
+                }
+               
+                return $this->render('recettes/test.html.twig', [
+                    'formulaire' => $formulaire->createView(),
+                    'ustensile' => $ustensile,
+
                 ]);
         }
 
@@ -467,10 +504,6 @@ class RecettesController extends AbstractController
             $this->entityManager->persist($favori);
             $this->addFlash('success', 'La recette a été ajoutée à vos favoris.');
         }
-
-        // Récupérer l'URL de la page précédente
-        $referer = $request->headers->get('referer');
-        $this->entityManager->flush();
 
         // Récupérer l'URL de la page précédente
         $referer = $request->headers->get('referer');

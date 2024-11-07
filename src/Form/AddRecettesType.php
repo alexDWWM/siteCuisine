@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,10 +38,10 @@ class AddRecettesType extends AbstractType
                 'multiple' => true,
                 'expanded' => true, // Transforme le select en checkboxes
                 'label' => 'Catégories',
-                'label_attr' => ['class' => 'checkbox-inline'],
-                'choice_attr' => function($choice, $key, $value) {
-                    return ['class' => 'form-check-input'];
-                },
+                // 'label_attr' => ['class' => 'checkbox-inline'],
+                // 'choice_attr' => function($choice, $key, $value) {
+                //     return ['class' => 'form-check-input'];
+                // },
             ])
             ->add('difficulte', EntityType::class, [
                 'class' => Difficulte::class,
@@ -75,6 +76,13 @@ class AddRecettesType extends AbstractType
                     return ['class' => 'form-check-input'];
                 },
             ])
+            ->add('submit', SubmitType::class,[
+                    "attr" => [
+                        'data-bs-toggle' => "HelloWorld",
+                        'data-bs-target' => "#myModal"
+                    ] 
+                ])
+           
         ;
     }
 

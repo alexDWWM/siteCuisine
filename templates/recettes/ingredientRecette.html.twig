@@ -1,14 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Les ingrédients de la recette{% endblock %}
-
 {% block body %}
 {{ form(formulaire)}}
+
 {% for ing in ingredient %}
     <div>
         {{ing.quantite}}
         {{ing.unite.nom}}
-        {{ing.ingredient.nom}}<br>
+        {{ing.ingredient.nom}}
+        <img src="{{ing.ingredient.thumbnail}}" alt="{{ing.ingredient.nom}}" style="width:5em"><br>
     </div>
-    {% endfor %}
+{% endfor %} 
+
+
+   
 {% endblock %}
