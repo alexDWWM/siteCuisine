@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Commentaire;
 use App\Entity\Favoris;
+use App\Entity\Ingredient;
 use App\Entity\Quantite;
 use App\Entity\Recette;
 use App\Entity\User;
@@ -321,53 +322,66 @@ class RecettesController extends AbstractController
                     }
                     $recette->setImage($newFileName);
                 }
-
+                
 
                 $recette = $form ->getData();
                 $recette ->setidUser($user);
                 $recette ->setDate(new DateTimeImmutable('today'));
-                $Fcategorie = $recette->getCategorie();
-                if ($Fcategorie) {
-                    foreach ($Fcategorie as $category) {
-                    
-                         dump($category); // Cela montre l'objet de catégorie
-                        $recette->addCategorie($category); // Ajoute la catégorie à la recette
-                    }
-                }
-                
-                //$data -> addCategorie($Fcategorie);
                 $em->persist($recette);
-                $em->flush();   
+                $em->flush();    
+                
+                return $this->redirectToRoute('app_recettes_new');
                 
             }
-                $form1 = $this->createForm(AddUstensileType::class);
-                $form2 = $this->createForm(AddIngredientsType::class);
-                $form3 = $this->createForm(AddTagType::class);
-                $form4 = $this->createForm(AddEtapesType::class);
-    
             // Afficher le formulaire
             return $this->render('recettes/add.html.twig', [
                 'form' => $form->createView(),
-                'form1' => $form1->createView(),
-                'form2' => $form2->createView(),
-                'form3' => $form3->createView(),
-                'form4' => $form4->createView(),
             ]);
 
         }
 
         #[Route('/add/recettes.', name: 'app_recette_add.')]
-        public function newQ(Request $request,RecetteRepository $rr,EntityManagerInterface $em): Response
+        public function newQ(Request $request,SluggerInterface $slugger, RecetteRepository $rr,EntityManagerInterface $em,#[Autowire('%kernel.project_dir%/public/uploads/')] string $uploadDirectory): Response
         {
             $newQ = new Quantite();
             $formulaire = $this->createForm(QuantiteType::class, $newQ);
             $formulaire->handleRequest($request);
-            $recette = $rr->findOneBy([], ['id' => 'DESC']);
-            $ingredient = $recette -> getQuantites();
+            $user = $this->getUser();
+            $findLast = $rr -> foundByUser($user);dump($findLast);
+            $ingredient = $findLast[0]->getQuantites();
+
+            $newI = new Ingredient();
+            $form =$this->createForm(AddIngredientsType::class,$newI);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                  /** @var UploadedFile */
+                  $image = $form->get('thumbnail')->getData();
+                  if($image){
+                      $originalFileName = pathinfo($image->getClientOriginalName(),PATHINFO_FILENAME);
+                      $safeFilename = $slugger->slug($originalFileName);
+                      $newFileName = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+  
+                      try{
+                          $image->move($uploadDirectory, $newFileName);
+                      }catch(FileException $e){
+  
+                      }
+                      $newI->setThumbnail($newFileName);
+                  }
+                $newI = $form ->getData();
+                $em->persist($newI);
+                $em->flush();
+                
+                return $this->redirectToRoute('app_recette_add.');
+
+                }
+               
+            
         
             if ($formulaire->isSubmitted() && $formulaire->isValid()) {
                 $newQ = $formulaire ->getData();
-                $newQ -> setRecette($recette);
+                $newQ -> setRecette($findLast[0]);dump($findLast);
                 $em->persist($newQ);
                 $em->flush();
                 
@@ -378,6 +392,8 @@ class RecettesController extends AbstractController
                 return $this->render('recettes/ingredientRecette.html.twig', [
                     'formulaire' => $formulaire->createView(),
                     'ingredient' => $ingredient,
+                    'recette' => $findLast,
+                    'form' => $form,
 
                 ]);
         }

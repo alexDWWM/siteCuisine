@@ -26,7 +26,7 @@ class QuantiteType extends AbstractType
                 'class' => UniteDeMesure::class,
                 'choice_label' => 'nom',
             ])
-            ->add('enregistrer', SubmitType::class)
+            ->add('ajouter', SubmitType::class)
         ;
     }
 
