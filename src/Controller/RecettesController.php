@@ -326,12 +326,19 @@ class RecettesController extends AbstractController
                 $recette = $form ->getData();
                 $recette ->setidUser($user);
                 $recette ->setDate(new DateTimeImmutable('today'));
-                $em->persist($recette);
-                $em->flush();
+                $Fcategorie = $recette->getCategorie();
+                if ($Fcategorie) {
+                    foreach ($Fcategorie as $category) {
+                    
+                         dump($category); // Cela montre l'objet de catégorie
+                        $recette->addCategorie($category); // Ajoute la catégorie à la recette
+                    }
+                }
                 
-    
-                // Rediriger vers la liste des recettes
-                return $this->redirectToRoute('app_recette_add.');
+                //$data -> addCategorie($Fcategorie);
+                $em->persist($recette);
+                $em->flush();   
+                
             }
                 $form1 = $this->createForm(AddUstensileType::class);
                 $form2 = $this->createForm(AddIngredientsType::class);
@@ -497,10 +504,6 @@ class RecettesController extends AbstractController
             $this->entityManager->persist($favori);
             $this->addFlash('success', 'La recette a été ajoutée à vos favoris.');
         }
-
-        // Récupérer l'URL de la page précédente
-        $referer = $request->headers->get('referer');
-        $this->entityManager->flush();
 
         // Récupérer l'URL de la page précédente
         $referer = $request->headers->get('referer');
