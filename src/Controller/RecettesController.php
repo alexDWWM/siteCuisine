@@ -326,18 +326,8 @@ class RecettesController extends AbstractController
                 $recette = $form ->getData();
                 $recette ->setidUser($user);
                 $recette ->setDate(new DateTimeImmutable('today'));
-                $Fcategorie = $recette->getCategorie();
-                if ($Fcategorie) {
-                    foreach ($Fcategorie as $category) {
-                    
-                         dump($category); // Cela montre l'objet de catégorie
-                        $recette->addCategorie($category); // Ajoute la catégorie à la recette
-                    }
-                }
-                
-                //$data -> addCategorie($Fcategorie);
                 $em->persist($recette);
-                $em->flush();   
+                $em->flush();      
                 
             }
                 $form1 = $this->createForm(AddUstensileType::class);

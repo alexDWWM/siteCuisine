@@ -51,7 +51,9 @@ class AddRecettesType extends AbstractType
                 'label' => 'Difficulté',
                 'label_attr' => ['class' => 'checkbox-inline'],
                 'choice_attr' => function($choice, $key, $value) {
-                    return ['class' => 'form-check-input'];
+                    return [ 
+                        'class' => 'form-check-input'
+                    ];
                 },
             ])
             ->add('budget', EntityType::class, [
