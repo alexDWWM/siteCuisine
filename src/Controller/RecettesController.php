@@ -321,7 +321,7 @@ class RecettesController extends AbstractController
                     }
                     $recette->setImage($newFileName);
                 }
-
+                return $this->redirectToRoute('app_recettes_new');
 
                 $recette = $form ->getData();
                 $recette ->setidUser($user);
@@ -330,18 +330,9 @@ class RecettesController extends AbstractController
                 $em->flush();      
                 
             }
-                $form1 = $this->createForm(AddUstensileType::class);
-                $form2 = $this->createForm(AddIngredientsType::class);
-                $form3 = $this->createForm(AddTagType::class);
-                $form4 = $this->createForm(AddEtapesType::class);
-    
             // Afficher le formulaire
             return $this->render('recettes/add.html.twig', [
                 'form' => $form->createView(),
-                'form1' => $form1->createView(),
-                'form2' => $form2->createView(),
-                'form3' => $form3->createView(),
-                'form4' => $form4->createView(),
             ]);
 
         }

@@ -80,8 +80,8 @@ class AddRecettesType extends AbstractType
             ])
             ->add('submit', SubmitType::class,[
                     "attr" => [
-                        'data-bs-toggle' => "HelloWorld",
-                        'data-bs-target' => "#myModal"
+                        'class' => "buttonA",
+                        
                     ] 
                 ])
            
