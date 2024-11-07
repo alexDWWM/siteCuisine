@@ -38,10 +38,10 @@ class AddRecettesType extends AbstractType
                 'multiple' => true,
                 'expanded' => true, // Transforme le select en checkboxes
                 'label' => 'Catégories',
-                'label_attr' => ['class' => 'checkbox-inline'],
-                'choice_attr' => function($choice, $key, $value) {
-                    return ['class' => 'form-check-input'];
-                },
+                // 'label_attr' => ['class' => 'checkbox-inline'],
+                // 'choice_attr' => function($choice, $key, $value) {
+                //     return ['class' => 'form-check-input'];
+                // },
             ])
             ->add('difficulte', EntityType::class, [
                 'class' => Difficulte::class,
@@ -51,7 +51,9 @@ class AddRecettesType extends AbstractType
                 'label' => 'Difficulté',
                 'label_attr' => ['class' => 'checkbox-inline'],
                 'choice_attr' => function($choice, $key, $value) {
-                    return ['class' => 'form-check-input'];
+                    return [ 
+                        'class' => 'form-check-input'
+                    ];
                 },
             ])
             ->add('budget', EntityType::class, [
@@ -76,7 +78,12 @@ class AddRecettesType extends AbstractType
                     return ['class' => 'form-check-input'];
                 },
             ])
-            ->add('AjouterLaRecette', SubmitType::class)
+            ->add('submit', SubmitType::class,[
+                    "attr" => [
+                        'class' => "buttonA", 
+                    ] 
+                ])
+           
         ;
     }
 

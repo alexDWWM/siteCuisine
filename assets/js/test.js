@@ -1,30 +1,52 @@
-const myModal = document.getElementById('myModal')
-const myInput = document.getElementById('myInput')
+const myModal = document.getElementById('myModal');
+const myInput = document.getElementById('myInput');
 
-myModal.addEventListener('shown.bs.modal', () => {
-  myInput.focus()
-})
+let form = document.getElementById('formRecette');
+let subBtn = document.getElementById('subBtn');
+console.log(subBtn)
+let modal = document.getElementById('myModal');
 
-// document.addEventListener('DOMContentLoaded', function() {
-//   $('#multiTabModal a').on('click', function (e) {
-//     e.preventDefault();
-//     $(this).tab('show');
-//   });
-// });
-          
+subBtn.addEventListener('click', function(e) {
+  e.preventDefault();
+  
+  const nom = document.querySelector('#add_recettes_nom').value
+  const image = document.querySelector('#add_recettes_image').value
+  const temps = document.querySelector('#add_recettes_temps').value
+  const description = document.querySelector('#add_recettes_description').value
+  const categorieCheck = Array.from(document.querySelectorAll('input[name="add_recettes[categorie][]"]:checked'))
+  .map(checkbox => checkbox.value);
+  const difficulte = document.querySelector('input[name="add_recettes[difficulte]"]:checked').value
+  const budget = document.querySelector('input[name="add_recettes[budget]"]:checked').value
+  const saison = document.querySelector('input[name="add_recettes[saison]"]:checked').value
+console.log(saison)
+  let donnees = {
+    'nom':nom,
+    'image':image,
+    'temps':temps,
+    'description':description,
+    'categorie':categorieCheck,
+    'difficulte':difficulte,
+    'budget':budget,
+    'saison':saison,
+  }
 
-// import { Modal } from 'bootstrap';
+  fetch("recettes", {
+    method: 'POST',
+    body: JSON.stringify(donnees)
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   const modalTriggerButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
-//   modalTriggerButtons.forEach(button => {
-//     button.addEventListener('click', () => {
-//       const target = button.getAttribute('data-bs-target');
-//       const modalElement = document.querySelector(target);
-//       const modal = new Modal(modalElement);
-//       modal.show();
-//     });
-//   });
-// });
-        
-    
+          modal.show();
+          console.log("cool");
+      } else {
+
+          alert("Erreur lors de l'enregistrement : " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Erreur:', error);
+      alert("PPP");
+  });
+});

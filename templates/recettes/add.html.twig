@@ -6,12 +6,11 @@
     <section class="container">
         <h1>Ajouter une nouvelle recette</h1>
         {{ form_start(form) }}
-
             {{ form_widget(form) }}
-    
+        {{form_end(form)}}
     </section>
-    <section class="container">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+    {# <section class="container"> #}
+      {# <button type="button" class="btn buttonA" data-bs-toggle="modal" data-bs-target="#myModal" id="subBtn">
         Passer aux étapes suivantes
         </button>
 
@@ -84,7 +83,7 @@
             </div>
         </div>
 
-    </section>
+    </section> #}
                    
 {% endblock %}
 
