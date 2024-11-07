@@ -321,13 +321,15 @@ class RecettesController extends AbstractController
                     }
                     $recette->setImage($newFileName);
                 }
-                return $this->redirectToRoute('app_recettes_new');
+                
 
                 $recette = $form ->getData();
                 $recette ->setidUser($user);
                 $recette ->setDate(new DateTimeImmutable('today'));
                 $em->persist($recette);
-                $em->flush();      
+                $em->flush();    
+                
+                return $this->redirectToRoute('app_recettes_new');
                 
             }
             // Afficher le formulaire

@@ -5,10 +5,8 @@
 {% block body %}
     <section class="container">
         <h1>Ajouter une nouvelle recette</h1>
-        {{ form_start(form, {'attr': {'id': 'formRecette'}}) }}
-
+        {{ form_start(form) }}
             {{ form_widget(form) }}
-         <button >Ajouter des ingrédients</button>
         {{form_end(form)}}
     </section>
     {# <section class="container"> #}

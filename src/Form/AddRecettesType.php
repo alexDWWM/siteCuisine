@@ -80,8 +80,7 @@ class AddRecettesType extends AbstractType
             ])
             ->add('submit', SubmitType::class,[
                     "attr" => [
-                        'class' => "buttonA",
-                        
+                        'class' => "buttonA", 
                     ] 
                 ])
            
