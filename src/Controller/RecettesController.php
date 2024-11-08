@@ -11,9 +11,6 @@ use App\Entity\User;
 use App\Form\AddIngredientsType;
 use App\Form\AddRecettesType;
 use App\Form\ChoiceUstensileType;
-use App\Form\AddTagType;
-use App\Form\AddEtapesType;
-use App\Form\AddUstensileType;
 use App\Form\CommentaireType;
 use App\Form\QuantiteType;
 use App\Repository\CategorieRepository;
@@ -31,14 +28,11 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class RecettesController extends AbstractController
 {
@@ -339,16 +333,31 @@ class RecettesController extends AbstractController
             ]);
 
         }
+        #[Route('/error', name: 'app_error')]
+        public function error(EntityManagerInterface $em): Response
+        {   
+            return $this->render('error.html.twig', [
+                
+            ]);
+        }
 
         #[Route('/add/recettes.', name: 'app_recette_add.')]
-        public function newQ(Request $request,SluggerInterface $slugger, RecetteRepository $rr,EntityManagerInterface $em,#[Autowire('%kernel.project_dir%/public/uploads/')] string $uploadDirectory): Response
+        public function newQ(Request $request,IngredientRepository $ing, SluggerInterface $slugger, RecetteRepository $rr,EntityManagerInterface $em,#[Autowire('%kernel.project_dir%/public/uploads/')] string $uploadDirectory): Response
         {
-            $newQ = new Quantite();
-            $formulaire = $this->createForm(QuantiteType::class, $newQ);
-            $formulaire->handleRequest($request);
             $user = $this->getUser();
-            $findLast = $rr -> foundByUser($user);dump($findLast);
-            $ingredient = $findLast[0]->getQuantites();
+            if ($user == null) {
+                return $this->redirectToRoute('app_error');
+            }
+            $newQ = new Quantite();
+            $ingTrier = $ing->findBy([],['nom'=> 'ASC']);
+            $formulaire = $this->createForm(QuantiteType::class, $newQ,[
+                'ingredientTrier' => $ingTrier,
+            ]);
+            
+            $formulaire->handleRequest($request);
+            
+            $findLast = $rr -> foundByUser($user);
+            $ingredient = $findLast[0]->getQuantites();dump($ingTrier);
 
             $newI = new Ingredient();
             $form =$this->createForm(AddIngredientsType::class,$newI);
