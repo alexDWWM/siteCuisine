@@ -151,8 +151,8 @@ class RecettesController extends AbstractController
         $ingredientId = $ing->find($id);
         $ingredientName = $ingredientId-> getNom();
         $recette = $rr->findAll();
-        $targetRecette = $rr->findByIngredient($ingredientName);
 
+        $targetRecette = $rr->findByIngredient($ingredientName);
 
         foreach ($recette as $recette) {
             $commentaires = $cor->findBy(['recette' => $recette]);
