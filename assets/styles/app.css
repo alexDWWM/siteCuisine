@@ -8,10 +8,15 @@ body {
 
 h3{
     overflow:hidden; 
-    height:3.5em; 
-    text-transform:capitalize; 
     margin-top:2%;
+    font-size: 1.5em;
+    height: 2.5em;
 }
+
+h3::first-letter {
+    text-transform: capitalize;
+}
+
 img{
     border-radius: 5px;
 }
@@ -103,6 +108,12 @@ h2 {
     overflow: hidden;
     text-transform: capitalize;
 }
+
+.imgIng {
+    width: 100%;
+    object-fit: cover;
+}
+
 /******************************************************************/
 /**                           SHOW RECETTE                       **/
 /******************************************************************/
@@ -128,7 +139,35 @@ h2 {
 #navigationToggle > div{
     border-right:solid 1px grey ;
     padding-right: 5%;
-    
+}
+
+.scale {
+    transition: 0.3s ease-in-out;
+}
+
+.scale:hover {
+    transform: scale(1.5);
+}
+
+.rotate {
+    transition: 0.3s ease-in-out;
+}
+
+.rotate:hover {
+    transform: rotate(180deg);
+}
+
+.imgSaison {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 35px;
+    transition: 0.3s ease-in-out;
+}
+
+.imgSaison:hover {
+    transform: rotate(180deg) scale(1.2);
+    border: solid 1px #333333;
 }
 
 /******************************************************************/

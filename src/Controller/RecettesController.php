@@ -3,13 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Commentaire;
+use App\Entity\Etapes;
 use App\Entity\Favoris;
 use App\Entity\Ingredient;
 use App\Entity\Quantite;
 use App\Entity\Recette;
 use App\Entity\User;
+use App\Entity\Ustensile;
+use App\Form\AddEtapesType;
 use App\Form\AddIngredientsType;
 use App\Form\AddRecettesType;
+use App\Form\AddUstensileType;
 use App\Form\ChoiceUstensileType;
 use App\Form\CommentaireType;
 use App\Form\QuantiteType;
@@ -87,7 +91,6 @@ class RecettesController extends AbstractController
         $categorie = $cr->findAll();
         $recette = $rr->findAll();
 
-
         return $this->render('recettes/priceAll.html.twig', [
             'categorie' => $categorie,
             'saison' => $saison,
@@ -97,7 +100,7 @@ class RecettesController extends AbstractController
 
         ]);
     }
-
+    
     
     #[Route('/recettes/price/{id}', name: 'app_recettes_price')]
 
@@ -112,9 +115,10 @@ class RecettesController extends AbstractController
         $budgetName = $budgetId-> getNom();
         $recettes = $rr->findAll();
         $targetRecette = $budgetId->getRecettes();
+        $averageNotes = [];
 
          //affichage de la note
-         foreach ($recettes as $recette) {
+         foreach ($targetRecette as $recette) {
             $commentaires = $cor->findBy(['recette' => $recette]);
             $totalNotes = 0;
             $count = count($commentaires);
@@ -125,7 +129,6 @@ class RecettesController extends AbstractController
 
             $averageNotes[$recette->getId()] = $count > 0 ? $totalNotes / $count : null;
         }
-
 
         return $this->render('recettes/price.html.twig', [
             'categorie' => $categorie,
@@ -147,13 +150,13 @@ class RecettesController extends AbstractController
     { 
         $saison = $sr->findAll();
         $budget = $br->findAll();
-        $ingredientId = $ing->find($id);
         $ingredient = $ing->findAll();
         $categorie = $cr->findAll();
+        $ingredientId = $ing->find($id);
         $ingredientName = $ingredientId-> getNom();
         $recette = $rr->findAll();
-        $targetRecette = $ingredientId->getRecettes();
 
+        $targetRecette = $rr->findByIngredient($ingredientName);
 
         foreach ($recette as $recette) {
             $commentaires = $cor->findBy(['recette' => $recette]);
@@ -176,8 +179,8 @@ class RecettesController extends AbstractController
             'ingredientName' => $ingredientName,
             'ingredientId' => $ingredientId,
             'targetRecette' => $targetRecette,
-            'averageNotes' => $averageNotes
-
+            'averageNotes' => $averageNotes,
+         
         ]);
     }
 
@@ -234,6 +237,9 @@ class RecettesController extends AbstractController
         // Récupérer tous les ustensiles pour cette recette
         $ustensiles = $oneRec->getUstensile();
 
+        //Récupérer les étapes de la recette
+        $etapes = $oneRec->getEtapes();
+
         // Récupérer tous les commentaires pour cette recette
         $commentaires = $cor->findBy(['recette' => $oneRec], ['date' => 'DESC']);
 
@@ -287,6 +293,7 @@ class RecettesController extends AbstractController
             'ingredients' => $ingredients,
             'ustensile' => $ustensile,
             'commentaire' => $form->createView(),
+            'etapes' => $etapes,
         ]);
     }
 
@@ -324,7 +331,7 @@ class RecettesController extends AbstractController
                 $em->persist($recette);
                 $em->flush();    
                 
-                return $this->redirectToRoute('app_recettes_new');
+                return $this->redirectToRoute('app_recette_add.');
                 
             }
             // Afficher le formulaire
@@ -341,7 +348,7 @@ class RecettesController extends AbstractController
             ]);
         }
 
-        #[Route('/add/recettes.', name: 'app_recette_add.')]
+        #[Route('/add/recettes/ingredients', name: 'app_recette_add.')]
         public function newQ(Request $request,IngredientRepository $ing, SluggerInterface $slugger, RecetteRepository $rr,EntityManagerInterface $em,#[Autowire('%kernel.project_dir%/public/uploads/')] string $uploadDirectory): Response
         {
             $user = $this->getUser();
@@ -357,12 +364,12 @@ class RecettesController extends AbstractController
             $formulaire->handleRequest($request);
             
             $findLast = $rr -> foundByUser($user);
-            $ingredient = $findLast[0]->getQuantites();dump($ingTrier);
+            $ingredient = $findLast[0]->getQuantites();dump($ingredient);
 
             $newI = new Ingredient();
             $form =$this->createForm(AddIngredientsType::class,$newI);
             $form->handleRequest($request);
-
+            //Créer un ingrédient
             if ($form->isSubmitted() && $form->isValid()) {
                   /** @var UploadedFile */
                   $image = $form->get('thumbnail')->getData();
@@ -385,9 +392,8 @@ class RecettesController extends AbstractController
                 return $this->redirectToRoute('app_recette_add.');
 
                 }
-               
-            
-        
+
+             //Ajouter un ingrédient à la recette
             if ($formulaire->isSubmitted() && $formulaire->isValid()) {
                 $newQ = $formulaire ->getData();
                 $newQ -> setRecette($findLast[0]);dump($findLast);
@@ -406,7 +412,7 @@ class RecettesController extends AbstractController
 
                 ]);
         }
-        #[Route('/add/recettes..', name: 'app_recette_add..')]
+        #[Route('/add/recettes/ustensiles', name: 'app_recette_add..')]
         public function addU(Request $request,RecetteRepository $rr,EntityManagerInterface $em): Response
         {
             $recette = $rr->findOneBy([], ['id' => 'DESC']);
@@ -414,8 +420,13 @@ class RecettesController extends AbstractController
             $formulaire = $this->createForm(ChoiceUstensileType::class, $recette);
             $formulaire->handleRequest($request);
             
+            $newUs = new Ustensile;
+            $form = $this->createForm(AddUstensileType::class, $newUs);
 
-            
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->persist($newUs);
+                $em->flush();
+            }
         
             if ($formulaire->isSubmitted() && $formulaire->isValid()) {
                 
@@ -427,9 +438,46 @@ class RecettesController extends AbstractController
 
                 }
                
-                return $this->render('recettes/test.html.twig', [
+                return $this->render('recettes/ustensiles.html.twig', [
                     'formulaire' => $formulaire->createView(),
                     'ustensile' => $ustensile,
+                    'form' => $form,
+
+                ]);
+        }
+
+        #[Route('/add/recettes/etape', name: 'app_recette_etape')]
+        public function etape(Request $request,RecetteRepository $rr,EntityManagerInterface $em): Response
+        {
+            $user = $this->getUser();
+            if ($user == null) {
+                return $this->redirectToRoute('app_error');
+            }
+            $newEtape = new Etapes();
+            $formulaire = $this->createForm(AddEtapesType::class, $newEtape);
+            $formulaire->handleRequest($request);
+            $recette = $rr -> foundByUser($user);
+            $derniereEtape = $recette[0]->getEtapes();
+            $recette = $recette[0];
+            $numeroEtape = count($derniereEtape) + 1;
+           
+
+            if ($formulaire->isSubmitted() && $formulaire->isValid()) {
+                $newEtape = $formulaire->getData();
+                $newEtape -> setRecette($recette[0]);
+                $newEtape -> setEtapes($numeroEtape);               
+                $em->persist($newEtape);
+                $em->flush();
+
+               
+                return $this->redirectToRoute('app_recette_etape');
+
+                }
+               
+                return $this->render('recettes/etape.html.twig', [
+                    'form' => $formulaire->createView(),
+                    'etape' => $derniereEtape,
+                    'recette' => $recette,
 
                 ]);
         }

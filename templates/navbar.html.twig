@@ -14,7 +14,14 @@
                 <input class="form-control mt-4" type="search" placeholder="Recherche" aria-label="Search">
             </form>
         </div>
+        <div>
+        {% for sai in global_saisons.getAllSaisons %}
+            {% if date()|date('m/d') > (sai.datedebut|date('m/d')) and date()|date('m/d') < (sai.datefin|date('m/d')) %}
+            <a href="/saison/show/{{sai.id}}"><img src="/{{sai.image}}" alt="{{sai.nom}}" class="imgSaison" title="Voir les recettes de saison"></a>
 
+            {% endif %}
+        {% endfor %}
+        </div>
         <div class="">
             {% if app.user and is_granted('ROLE_ADMIN') %}
                 <a href="/admin" class="nav-link me-3" aria-current="page" style="color:white">Accès Admin</a>                           
@@ -23,18 +30,18 @@
 
                 <div class="d-flex">
                     <a href="/profil"><p class="m-0 pe-3" style="color:black">{{app.user.pseudo}}</p></a>
-                    <a href="/profil/#favoris"><i class="fa-regular fa-heart"></i></a>
-                    <a href="/logout"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" fill="black" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <a href="/profil/#favoris"><i class="fa-regular fa-heart scale" title="Voir mon profil"></i></a>
+                    <a href="/logout"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" fill="black" class="bi bi-x-lg rotate" title="Se déconnecter" viewBox="0 0 16 16">
                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                     </svg></a>
                 </div>
             {% else %}
-                    <a href="/login"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" fill="black" class="bi bi-person-circle m-1" viewBox="0 0 16 16">
+                    <a href="/login"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" fill="black" class="bi bi-person-circle m-1" title="Voir mon compte" viewBox="0 0 16 16">
 
                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                     <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                     </svg></a>
-                    <a href="/register"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" fill="black" class="bi bi-file-plus m-1" viewBox="0 0 16 16">
+                    <a href="/register"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" fill="black" class="bi bi-file-plus m-1" title="M'inscrire" viewBox="0 0 16 16">
                     <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z"/>
                     <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
                     </svg></a>
@@ -44,12 +51,9 @@
             <div class="d-flex justify-content-center flex-wrap container" id="navigationToggle">
                 <div class="categorie me-auto mt-2" style="max-height:16em; overflow:hidden"><a href="/categorie"><h5>Catégories</h5></a>
                     {% for category in global_categories.getAllCategories %}
-                        {% if category.nom == 'Saison' %}
-                        {% else %}
                         <div>
                             <a href="/categorie/{{category.id}}" ><p class="me-5" style="text-transform:capitalize">{{category.nom}}</p></a>
                         </div>                       
-                        {% endif %}
                     {% endfor %}
                 </div>
                 <div class="saison me-auto mt-2" style="max-height:16em; overflow:hidden"><a href="/saison"><h5>Saisons</h5></a>

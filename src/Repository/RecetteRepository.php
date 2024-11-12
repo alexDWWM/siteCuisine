@@ -19,17 +19,17 @@ class RecetteRepository extends ServiceEntityRepository
 //    /**
 //     * @return Recette[] Returns an array of Recette objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function findByIngredient($nom): array
+   {
+       return $this->createQueryBuilder('r')
+        ->InnerJoin('r.quantites', 'q')
+        ->InnerJoin('q.ingredient', 'i')
+           ->where('i.nom = :val')
+           ->setParameter('val', $nom)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
     public function foundByOrder($nbRecette = 4)
     {
@@ -64,6 +64,17 @@ class RecetteRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    public function getLastEtape($recette)
+{
+    return $this->createQueryBuilder('r')
+        ->leftJoin('r.etapes', 'e') 
+        ->where('r.id = :recetteId')
+        ->setParameter('recetteId', $recette->getId())
+        ->orderBy('e.etapes', 'DESC') // Trier par numéro d'étape décroissant
+        ->setMaxResults(1) // Récupérer seulement la dernière étape
+        ->getQuery()
+        ->getOneOrNullResult(); // Renvoie null si aucune étape
+}
 
     
 }

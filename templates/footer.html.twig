@@ -12,10 +12,26 @@
               <p>&copy; {{ "now"|date("Y") }} Bistroquet | Tous droits réservés</p>
             </div>
             <div>
-              <ul>
-                  <li><a href="/register">S'inscrire</a></li>
-                  <li><a href="/login">Se connecter</a></li>
-              </ul>
+            {% if app.user %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <span>Bonjour {{ app.user.pseudo }} !&nbsp;</span>
+                                    <a href="{{ path('admin') }}" class="white"><i class="fa-solid fa-user mr-2" title="Mon profil">&nbsp;</i></a>
+                                    <a href="{{ path('app_logout') }}" class="white">&nbsp;Se déconnecter</a>
+                                {% else %}
+                                    <span>Bonjour {{ app.user.pseudo }} !</span>
+                                    <a href="{{ path('app_profil') }}" class="white"><i class="fa-solid fa-user mr-2" title="Mon profil"></i></a>
+                                    <a href="{{ path('app_logout') }}" class="">&nbsp;Se déconnecter</a>
+                                {% endif %}
+                            {% else %}
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-3">
+                                    <li class="nav-item mr-2">
+                                        <a class="nav-link" href="{{ path('app_login') }}">&nbsp;Se connecter</a>
+                                    </li>
+                                    <li class="nav-item mr-2">
+                                        <a class="nav-link" href="{{ path('app_register') }}">&nbsp;S'inscrire</a>
+                                    </li>
+                                </ul>
+                            {% endif %}
             </div>
         </div>
     
