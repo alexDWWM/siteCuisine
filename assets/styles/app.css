@@ -108,6 +108,7 @@ h2 {
     overflow: hidden;
     text-transform: capitalize;
 }
+
 /******************************************************************/
 /**                           SHOW RECETTE                       **/
 /******************************************************************/
@@ -149,6 +150,19 @@ h2 {
 
 .rotate:hover {
     transform: rotate(180deg);
+}
+
+.imgSaison {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 35px;
+    transition: 0.3s ease-in-out;
+}
+
+.imgSaison:hover {
+    transform: rotate(180deg) scale(1.2);
+    border: solid 1px #333333;
 }
 
 /******************************************************************/
