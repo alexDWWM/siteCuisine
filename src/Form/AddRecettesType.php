@@ -71,6 +71,7 @@ class AddRecettesType extends AbstractType
                 'class' => Saison::class,
                 'choice_label' => 'nom',
                 'multiple' => false,
+                'required' => false,
                 'expanded' => true, // Transforme le select en checkboxes
                 'label' => 'Saison',
                 'label_attr' => ['class' => 'checkbox-inline'],

@@ -14,7 +14,13 @@
                 <input class="form-control mt-4" type="search" placeholder="Recherche" aria-label="Search">
             </form>
         </div>
-
+        <div>
+        {% for sai in global_saisons.getAllSaisons %}
+                    {% if date()|date('m/d') > (sai.datedebut|date('m/d')) and date()|date('m/d') < (sai.datefin|date('m/d')) %}
+                    {{sai.nom}}
+                    {% endif %}
+                {% endfor %}
+        </div>
         <div class="">
             {% if app.user and is_granted('ROLE_ADMIN') %}
                 <a href="/admin" class="nav-link me-3" aria-current="page" style="color:white">Accès Admin</a>                           
@@ -44,12 +50,9 @@
             <div class="d-flex justify-content-center flex-wrap container" id="navigationToggle">
                 <div class="categorie me-auto mt-2" style="max-height:16em; overflow:hidden"><a href="/categorie"><h5>Catégories</h5></a>
                     {% for category in global_categories.getAllCategories %}
-                        {% if category.nom == 'Saison' %}
-                        {% else %}
                         <div>
                             <a href="/categorie/{{category.id}}" ><p class="me-5" style="text-transform:capitalize">{{category.nom}}</p></a>
                         </div>                       
-                        {% endif %}
                     {% endfor %}
                 </div>
                 <div class="saison me-auto mt-2" style="max-height:16em; overflow:hidden"><a href="/saison"><h5>Saisons</h5></a>
