@@ -29,14 +29,7 @@ class CategorieController extends AbstractController
     {
        
         $categorieId = $cr->find($id);
-<<<<<<< HEAD
-        $saison = $sr->findAll();
-        $budget = $br->findAll();
-        $ingredient = $ing->findAll();
-        $recettes = $categorieId->getRecettes();dump($recettes);
-=======
         $recettes = $categorieId->getRecettes();
->>>>>>> refs/remotes/origin/alex
         $averageNotes = [];
         // Retourner si aucune recette n'est trouvée
         if ($recettes[0] != null){
