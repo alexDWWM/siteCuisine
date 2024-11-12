@@ -22,7 +22,7 @@
                 {% for recette in recettesAjoutees %}
                     <tr>
                         <td><a href="{{ path('app_recettes_show', {'id': recette.id}) }}">{{ recette.nom }}</a></td>
-                        <td><img src="{{ asset('uploads/' ~ recette.image) }}" alt="{{ recette.nom }}" class="width50"></td>
+                        <td><img src="{{ asset('uploads/' ~ recette.image) }}" alt="{{ recette.nom }}" class="ingredient-image p-1"></td>
                     </tr>
                 {% else %}
                     <tr>
