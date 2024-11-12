@@ -39,7 +39,7 @@ class CategorieController extends AbstractController
         $saison = $sr->findAll();
         $budget = $br->findAll();
         $ingredient = $ing->findAll();
-        $recettes = $categorieId->getRecettes();
+        $recettes = $categorieId->getRecettes();dump($recettes);
         $averageNotes = [];
 
         //affichage de la note
