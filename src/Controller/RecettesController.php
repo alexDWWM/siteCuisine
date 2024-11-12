@@ -87,7 +87,6 @@ class RecettesController extends AbstractController
         $categorie = $cr->findAll();
         $recette = $rr->findAll();
 
-
         return $this->render('recettes/priceAll.html.twig', [
             'categorie' => $categorie,
             'saison' => $saison,
@@ -97,7 +96,7 @@ class RecettesController extends AbstractController
 
         ]);
     }
-
+    
     
     #[Route('/recettes/price/{id}', name: 'app_recettes_price')]
 
@@ -112,9 +111,10 @@ class RecettesController extends AbstractController
         $budgetName = $budgetId-> getNom();
         $recettes = $rr->findAll();
         $targetRecette = $budgetId->getRecettes();
+        $averageNotes = [];
 
          //affichage de la note
-         foreach ($recettes as $recette) {
+         foreach ($targetRecette as $recette) {
             $commentaires = $cor->findBy(['recette' => $recette]);
             $totalNotes = 0;
             $count = count($commentaires);
@@ -125,7 +125,6 @@ class RecettesController extends AbstractController
 
             $averageNotes[$recette->getId()] = $count > 0 ? $totalNotes / $count : null;
         }
-
 
         return $this->render('recettes/price.html.twig', [
             'categorie' => $categorie,
