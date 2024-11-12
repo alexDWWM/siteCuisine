@@ -2,41 +2,43 @@
 
 {% block title %}Les ingrédients de la recette{% endblock %}
 {% block body %}
-{{ form(formulaire)}}
-
-{% for ing in ingredient %}
-    <div>
-        {{ing.quantite}}
-        {{ing.unite.nom}}
-        {{ing.ingredient.nom}}
-        <img src="/uploads/{{ing.ingredient.thumbnail}}" alt="{{ing.ingredient.nom}}" style="width:5em"><br>
-    </div>
-{% endfor %} 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Ajouter Ingrédient
-</button>
-
+<section class="container mt-3">
 {% for rec in recette %}
-<div>{{ rec.nom }}</div>
-{% endfor %}{{form(form)}}
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <h3 class='text-center'>Ingrédients pour: {{ rec.nom }}</h3>
+  {% endfor %}
+  {{ form_start(formulaire)}}
+    {{ form_widget(formulaire)}}
+      <button type="submit" class="btn btn-primary">Ajouter des étapes</button>
+       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Ajouter Un Ingrédient
+  </button>
+    {{ form_end(formulaire)}}
+  {% for ing in ingredient %}
+      <div>
+          {{ing.quantite}}
+          {{ing.unite.nom}}
+          {{ing.ingredient.nom}}
+          <img src="/uploads/{{ing.ingredient.thumbnail}}" alt="{{ing.ingredient.nom}}" style="width:5em"><br>
       </div>
-      <div class="modal-body">
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+  {% endfor %} 
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Ajouter un ingrédient</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        {{form_start(form)}}
+          {{form_widget(form)}}
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+          {{form_end(form)}}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-   
+</section>
 {% endblock %}

@@ -16,17 +16,18 @@ class QuantiteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        
         $builder
             ->add('quantite')
             ->add('ingredient', EntityType::class, [
                 'class' => Ingredient::class,
+                'choices'=> $options['ingredientTrier'],
                 'choice_label' => 'nom',
             ])
             ->add('unite', EntityType::class, [
                 'class' => UniteDeMesure::class,
                 'choice_label' => 'nom',
             ])
-            ->add('ajouter', SubmitType::class)
         ;
     }
 
@@ -34,6 +35,7 @@ class QuantiteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Quantite::class,
+            'ingredientTrier' => [], 
         ]);
     }
 }

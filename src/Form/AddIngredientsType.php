@@ -22,8 +22,8 @@ class AddIngredientsType extends AbstractType
             ])
             ->add('thumbnail' ,FileType::class,[
                 'mapped' => false,
-            ])
-            ->add('enregistrer', SubmitType::class);
+            ]);
+           
     }
 
     public function configureOptions(OptionsResolver $resolver): void
