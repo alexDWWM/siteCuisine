@@ -27,13 +27,14 @@ class Ingredient
     #[ORM\OneToMany(targetEntity: Quantite::class, mappedBy: 'ingredient')]
     private Collection $quantites;
 
-    #[ORM\OneToMany(targetEntity: RecetteIngredient::class, mappedBy: 'ingredient', cascade: ['persist', 'remove'])]
-    private $recetteIngredients;
+    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'ingredient', cascade: ['persist', 'remove'])]
+    private Collection $recetteIngredients;
 
     public function __construct()
     {
         $this->nom = new ArrayCollection();
         $this->quantites = new ArrayCollection();
+        $this->recetteIngredients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,6 +62,36 @@ class Ingredient
     public function setThumbnail(string $thumbnail): static
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecetteIngredient>
+     */
+    public function getRecetteIngredients(): Collection
+    {
+        return $this->recetteIngredients;
+    }
+
+    public function addRecetteIngredients(RecetteIngredient $recette): static
+    {
+        if (!$this->recetteIngredients->contains($recette)) {
+            $this->recetteIngredients->add($recette);
+            $recette->setIngredient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecetteIngredients(RecetteIngredient $recette): static
+    {
+        if ($this->recetteIngredients->removeElement($recette)) {
+            // set the owning side to null (unless already changed)
+            if ($recette->getIngredient() === $this) {
+                $recette->setIngredient(null);
+            }
+        }
 
         return $this;
     }
@@ -94,5 +125,6 @@ class Ingredient
 
         return $this;
     }
+
 
 }
