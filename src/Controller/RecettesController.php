@@ -476,10 +476,9 @@ class RecettesController extends AbstractController
             $formulaire = $this->createForm(AddEtapesType::class, $newEtape);
             $formulaire->handleRequest($request);
             $recette = $rr -> foundByUser($user);
-            $derniereEtape = $recette[0]->getEtapes();
+            $etape = $recette[0]->getEtapes();
             $recette = $recette[0];
-            $numeroEtape = count($derniereEtape) + 1;
-           
+            $numeroEtape = count($etape) + 1;           
 
             if ($formulaire->isSubmitted() && $formulaire->isValid()) {
                 $newEtape = $formulaire->getData();
@@ -494,8 +493,8 @@ class RecettesController extends AbstractController
                 }
                
                 return $this->render('recettes/etape.html.twig', [
-                    'form' => $formulaire->createView(),
-                    'etape' => $derniereEtape,
+                    'formulaire' => $formulaire->createView(),
+                    'etape' => $etape,
                     'recette' => $recette,
                     'numeroEtape' => $numeroEtape,
 

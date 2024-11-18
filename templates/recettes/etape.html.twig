@@ -2,18 +2,23 @@
 
 {% block body %}
 <div class="container">
-   {{ form_start(form)}}
+   {{ form_start(formulaire)}}
       <p>Etape n° {{numeroEtape}}</p>
-      {{form_widget(form)}}
-   {{form_end(form)}}
+      {{form_widget(formulaire)}}
+   {{form_end(formulaire)}}
 
    {% for etap in etape %}
    
-      <div class="d-flex row">
-         <h3>Etape {{etap.etapes}}</h3>
+      <div class="d-flex row" id="etapeRecette">
+         <div class ="d-flex">
+            <h3>Etape {{etap.etapes}}</h3>
+            <i class="fa-solid fa-paintbrush fa-xs  mt-4" id="update"></i>
+         </div>
+         
          <p>{{etap.description}}</p>
       </div>
    {% endfor %}
+   {# {{form(form)}} #}
       <div>
       <a href="/recettes/{{recette.id}}"><button class="buttonB">Valider la recette</button></a>
    </div>
